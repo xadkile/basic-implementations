@@ -1,8 +1,5 @@
 package graph
 
-fun main(){
-    println("zxczxcxzc")
-}
 data class AdjacencyListGraph<
         NT : Comparable<NT>,
         N : Node<NT>,
