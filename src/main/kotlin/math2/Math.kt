@@ -1,19 +1,27 @@
-package math
+package math2
 
-fun squareRoot(x:Double,iterationCount:Int):Double{
-    var re = 1.0
-    for(i in 0 until iterationCount){
-        val dif = (re * re - x)/(2*re)
-        println(dif)
+import kotlin.math.abs
+
+fun main() {
+}
+
+fun squareRoot(x: Double, difLimit: Double): Double {
+    var re = x/7
+    var dif = (re * re - x) / (2 * re)
+    var iterationCount = 0
+    while (abs(dif) >= difLimit) {
         re -= dif
+        dif = (re * re - x) / (2 * re)
+        iterationCount++
     }
+    println(iterationCount)
     return re
 }
 
-fun squareRoot(x:Number,iterationCount: Int):Double{
-    return squareRoot(x.toDouble(),iterationCount)
+fun squareRoot(x: Number, difLimit: Double): Double {
+    return squareRoot(x.toDouble(), difLimit)
 }
 
-fun squareRoot(x:Number):Double{
-    return squareRoot(x,10)
+fun squareRoot(x: Number): Double {
+    return squareRoot(x, 0.00000000001)
 }

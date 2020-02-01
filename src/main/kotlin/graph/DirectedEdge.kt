@@ -1,7 +1,7 @@
 package graph
 
 /***
- * this by default is by-directional
+ * this by default is bi-directional
  */
 interface Edge<NT : Comparable<NT>, N : Node<NT>> {
     fun getFirst(): N
