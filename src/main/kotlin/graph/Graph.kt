@@ -3,11 +3,30 @@ package graph
 
 /**
  * Immutable Graph
+ * Hold edge direction info
+ * Provide traversal and search operations (depth and breadth)
  */
 interface Graph<NT : Comparable<NT>, N : Node<NT>, EDGE : Edge<NT, N>> {
+
+    /**
+     * check if there is an edge between two node
+     */
     fun hasEdge(node1: Node<NT>, node2: Node<NT>): Boolean
+
+    /**
+     * get edge between two node, return null if no edge exist for the input pair
+     */
     fun getEdge(node1: Node<NT>, node2: Node<NT>): EDGE?
+
+    /**
+     * Get neighbor nodes of a node
+     */
     fun getNeighbors(node: Node<NT>): List<Node<NT>>
+
+    /**
+     * Get edges of a node
+     */
+    fun getEdges(node:Node<NT>):List<EDGE>
 
     /**
      * traversal by depth first search
@@ -35,14 +54,14 @@ interface Graph<NT : Comparable<NT>, N : Node<NT>, EDGE : Edge<NT, N>> {
     fun shortestPath(fromNode: Node<NT>, toNode: Node<NT>): List<Node<NT>>
 }
 
-///**
-// * Mutable graph
-// */
-//interface MutableGraph<NT : Comparable<NT>, N : Node<NT>> : Graph<NT,N> {
-//    fun removeVertex(node: Node<NT>): Graph<NT, N>
-//    fun addEdge(edge: DirectedEdge<NT, N>): Graph<NT, N>
-//    fun removeEdge(node1: Node<NT>, node2: Node<NT>): Graph<NT, N>
-//}
+/**
+ * Mutable graph
+ */
+interface MutableGraph<NT : Comparable<NT>, N : Node<NT>,EDGE : Edge<NT, N>> : Graph<NT,N,EDGE> {
+    fun removeVertex(node: Node<NT>)
+    fun addEdge(edge: EDGE)
+    fun removeEdge(node1: Node<NT>, node2: Node<NT>)
+}
 
 
 

@@ -1,9 +1,19 @@
 package graph
 
+import java.util.*
+
+
+fun main() {
+
+}
+
+/**
+ * Use a 2-layer map to represent an adjacency list and to allow instant lookup
+ */
 data class AdjacencyListGraph<
         NT : Comparable<NT>,
         N : Node<NT>,
-        EDGE:Edge<NT,N>> (val adjacencyList: Map<Node<NT>, Map<Node<NT>, EDGE>>) :
+        EDGE : Edge<NT, N>>(val adjacencyList: Map<Node<NT>, Map<Node<NT>, EDGE>>) :
     Graph<NT, N, EDGE> {
 
     override fun hasEdge(node1: Node<NT>, node2: Node<NT>): Boolean {
@@ -18,11 +28,39 @@ data class AdjacencyListGraph<
         return this.adjacencyList[node]?.keys?.toList() ?: listOf()
     }
 
-    override fun <R> depthTraversal(fromNode: Node<NT>, todo: (node: Node<NT>) -> R) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getEdges(node: Node<NT>): List<EDGE> {
+        return this.adjacencyList[node]?.values?.toList() ?: listOf()
     }
 
-    override fun depthSearch(target: NT): Node<NT> {
+    /**
+     * [fromNode]: starting node
+     * [todo]: callback to run on each node
+     * non-recursive approach
+     */
+    override fun <R> depthTraversal(fromNode: Node<NT>, todo: (node: Node<NT>) -> R) {
+        //lifo
+        val stack = Stack<Node<NT>>()
+        stack.add(fromNode)
+        //list of visited node, use map for instant lookup
+        val visited = mutableMapOf<Node<NT>, Node<NT>>()
+
+        while (stack.isNotEmpty()) {
+            val currentNode: Node<NT> = stack.pop()
+            //marked as visited
+            if (visited[currentNode] == null) {
+                visited[currentNode] = currentNode
+                todo(currentNode)
+            }
+            val edgeList: Map<Node<NT>, EDGE>? = this.adjacencyList[currentNode]
+            if (edgeList != null) {
+                for ((neighbor, _) in edgeList) {
+                    if(visited[neighbor]==null) stack.push(neighbor)
+                }
+            }
+        }
+    }
+
+    override fun  depthSearch(target: NT): Node<NT> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
