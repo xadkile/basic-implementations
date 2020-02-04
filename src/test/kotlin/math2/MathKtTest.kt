@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 internal class MathKtTest {
     @Test
     fun squareRoot() {
-        val input = Random.nextDouble()
+        val input = Random.nextDouble()*10000
         val result = squareRoot(input)
         assertEquals(input,result*result,0.0001)
     }
