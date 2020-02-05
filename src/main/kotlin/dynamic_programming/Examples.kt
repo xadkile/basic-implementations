@@ -26,7 +26,7 @@ fun fibonacciUsingLoop(n: Long): BigInteger {
 /**
  * calculate fibonacciWithCache number at n position
  * n start at 0
- * O(2n)
+ * O(n)
  */
 fun fibonacciWithCache(n: Long, fCache: MutableMap<Long, BigInteger>): BigInteger {
     if (n == 0L) {
@@ -54,14 +54,14 @@ fun fibonacciWithCache(n: Long, fCache: MutableMap<Long, BigInteger>): BigIntege
 }
 
 /**
- * O(n^2)
+ * O(2^n)
  */
-fun recursiveFinonacci(n: Long): BigInteger {
+fun recursiveFibonacci(n: Long): BigInteger {
     return if (n == 0L) {
         BigInteger.ZERO
     } else if (n == 1L) {
         BigInteger.ONE
     } else {
-        recursiveFinonacci(n - 1) + recursiveFinonacci(n - 2)
+        recursiveFibonacci(n - 1) + recursiveFibonacci(n - 2)
     }
 }
