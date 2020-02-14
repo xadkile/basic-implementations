@@ -57,11 +57,12 @@ fun fibonacciWithCache(n: Long, fCache: MutableMap<Long, BigInteger>): BigIntege
  * O(2^n)
  */
 fun recursiveFibonacci(n: Long): BigInteger {
-    return if (n == 0L) {
-        BigInteger.ZERO
-    } else if (n == 1L) {
-        BigInteger.ONE
+    return if (n == 0L) { //T1
+        BigInteger.ZERO   //T2
+    } else if (n == 1L) {  //T3
+        BigInteger.ONE  //T4
     } else {
+        //T5
         recursiveFibonacci(n - 1) + recursiveFibonacci(n - 2)
     }
 }

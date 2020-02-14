@@ -3,9 +3,9 @@ package graph
 /***
  * this by default is single-directional
  */
-interface Edge<NT : Comparable<NT>, N : Node<NT>> {
-    fun getFrom(): N
-    fun getTo(): N
+interface Edge<NT : Comparable<NT>> {
+    fun getFrom(): Node<NT>
+    fun getTo(): Node<NT>
 }
 
 interface Weighted<T : Comparable<T>> {
@@ -14,21 +14,22 @@ interface Weighted<T : Comparable<T>> {
 
 interface WeightedEdge<
         NT : Comparable<NT>,
-        N : Node<NT>,
-        W : Comparable<W>> :
-    Edge<NT, N>,
-    Weighted<W> {
+        WEIGHT : Comparable<WEIGHT>> :
+    Edge<NT>,
+    Weighted<WEIGHT> {
 }
 
 /**
  * single direction, non-weighted edge
  */
-class SimpleEdge<NT : Comparable<NT>, N : Node<NT>>(private val node1: N, private val node2: N) : Edge<NT, N> {
-    override fun getFrom(): N {
+class SimpleEdge<NT : Comparable<NT>>
+    (private val node1: Node<NT>,
+     private val node2: Node<NT>) : Edge<NT> {
+    override fun getFrom(): Node<NT> {
         return this.node1
     }
 
-    override fun getTo(): N {
+    override fun getTo(): Node<NT> {
         return this.node2
     }
 }
