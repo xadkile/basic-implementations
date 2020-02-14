@@ -29,7 +29,8 @@ interface Graph<NT : Comparable<NT>> {
     fun getEdges(node:Node<NT>):List<Edge<NT>>
 
     /**
-     * traversal by depth first search
+     * traversal depth first with a specific [startingNode]
+     * apply [sideEffect]  on each node along the way
      */
     fun depthTraversal(startingNode: Node<NT>, sideEffect: (node: Node<NT>) -> Unit)
 
@@ -39,22 +40,23 @@ interface Graph<NT : Comparable<NT>> {
     fun depthSearch(startingNode: Node<NT>, target: NT): Node<NT>?
 
     /**
-     * search by depth-first search
+     * search [target] by depth-first search
      */
     fun depthSearch(target: NT): Node<NT>?
 
     /**
-     * traversal by breadth first search
+     * traversal by breadth first search with a specified [startingNode]
+     * apply [sideEffect] on each node along the way
      */
     fun breadthTraversal(startingNode: Node<NT>, sideEffect: (node: Node<NT>) -> Unit)
 
     /**
-     * search by bread first search, with a specified starting node
+     * search by bread first search, with a specific [startingNode]
      */
     fun breadthSearch(startingNode:Node<NT>,target: NT): Node<NT>?
 
     /**
-     * search by breadth first search
+     * search [target] by breadth first search
      */
     fun breadthSearch(target: NT): Node<NT>?
 

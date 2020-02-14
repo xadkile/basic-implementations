@@ -50,22 +50,22 @@ internal class AdjacencyListGraphTest {
 
     @Test
     fun hasEdge() {
-        assertTrue(graph.hasEdge(nodeA, nodeB))
-        assertFalse(graph.hasEdge(nodeA, nodeD))
+        assertTrue(this.graph.hasEdge(this.nodeA, this.nodeB))
+        assertFalse(this.graph.hasEdge(this.nodeA, this.nodeD))
     }
 
     @Test
     fun getEdge() {
-        val edge: Edge<String>? = graph.getEdge(nodeB, nodeD)
+        val edge: Edge<String>? = this.graph.getEdge(this.nodeB, this.nodeD)
         assertNotNull(edge)
-        assertEquals(nodeB, edge.getFrom())
-        assertEquals(nodeD, edge.getTo())
+        assertEquals(this.nodeB, edge.getFrom())
+        assertEquals(this.nodeD, edge.getTo())
     }
 
     @Test
     fun getNeighbors() {
-        val ne: List<Node<String>> = graph.getNeighbors(nodeE)
-        val expectation = listOf(nodeA, nodeF)
+        val ne: List<Node<String>> = this.graph.getNeighbors(nodeE)
+        val expectation = listOf(this.nodeA, this.nodeF)
         assertEquals(expectation, ne)
     }
 
@@ -75,7 +75,7 @@ internal class AdjacencyListGraphTest {
         val expectation = mutableListOf(
             "A", "E", "F", "B", "D", "C", "G"
         )
-        graph.depthTraversal(nodeA) { order.add(it.getValue()) }
+        this.graph.depthTraversal(this.nodeA) { order.add(it.getValue()) }
         assertEquals(expectation, order)
     }
 
@@ -91,7 +91,7 @@ internal class AdjacencyListGraphTest {
     fun breadthTraversal() {
         val order = mutableListOf<String>()
         val expectation = mutableListOf("A", "B", "C", "E", "F", "D", "G")
-        graph.breadthTraversal(nodeA) { order.add(it.getValue()) }
+        this.graph.breadthTraversal(nodeA) { order.add(it.getValue()) }
         assertEquals(expectation, order)
     }
 
@@ -109,15 +109,15 @@ internal class AdjacencyListGraphTest {
     }
 
     private fun testSearchWithDefaultStartingNode(searchFunction: (data: String) -> Node<String>?) {
-        val data: String = nodeF.getValue()
-        val expectation: Node<String> = nodeF
+        val data: String = this.nodeF.getValue()
+        val expectation: Node<String> = this.nodeF
         val re: Node<String>? = searchFunction(data)
         testSearchResult(re, expectation)
     }
 
     private fun testSearchWithCustomStartingNode(searchFunction: (startingNode: Node<String>, data: String) -> Node<String>?) {
-        val data: String = nodeF.getValue()
-        val expectation: Node<String> = nodeF
+        val data: String = this.nodeF.getValue()
+        val expectation: Node<String> = this.nodeF
         for (node: Node<String> in nodeList) {
             val rr: Node<String>? = searchFunction(node, data)
             this.testSearchResult(rr, expectation)

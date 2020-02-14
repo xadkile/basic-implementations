@@ -1,7 +1,7 @@
 package graph
 
 /***
- * this by default is single-directional
+ * single-directional edge
  */
 interface Edge<NT : Comparable<NT>> {
     fun getFrom(): Node<NT>
