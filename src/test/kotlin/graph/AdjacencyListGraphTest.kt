@@ -91,7 +91,10 @@ internal class AdjacencyListGraphTest {
     fun breadthTraversal() {
         val order = mutableListOf<String>()
         val expectation = mutableListOf("A", "B", "C", "E", "F", "D", "G")
-        this.graph.breadthTraversal(nodeA) { order.add(it.getValue()) }
+        this.graph.breadthTraversal(nodeA) { it ->
+            order.add(it.getValue())
+            Unit
+        }
         assertEquals(expectation, order)
     }
 
@@ -126,5 +129,9 @@ internal class AdjacencyListGraphTest {
 
     @Test
     fun shortestPath() {
+        val target:Node<String> = nodeF
+        val expectation = listOf(nodeA,nodeB,nodeF)
+        val result = this.graph.shortestPath(nodeA,target)
+        assertEquals(expectation,result)
     }
 }

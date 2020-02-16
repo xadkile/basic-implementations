@@ -74,8 +74,8 @@ data class AdjacencyListGraph<
             //add neighbours to stack
             val edgeList: Map<out Node<NT>, Edge<NT>>? = this.adjacencyList[currentNode]
             if (edgeList != null) {
-                for(nb in edgeList.keys){
-                    if(visited[nb]==null) stack.push(nb)
+                for (nb in edgeList.keys) {
+                    if (visited[nb] == null) stack.push(nb)
                 }
             }
         }
@@ -100,29 +100,37 @@ data class AdjacencyListGraph<
     private fun <R> breakableBreadthTraversal(
         startingNode: Node<NT>,
         breakCondition: (node: Node<NT>) -> Boolean,
-        returnOnBreak: (node: Node<NT>) -> R,
+        returnOnBreak: (node: Node<NT>, prevNode: Node<NT>, prevMap: Map<Node<NT>, Node<NT>>) -> R,
         sideEffect: (node: Node<NT>) -> Unit
-    ) : R?{
+    ): R? {
         //FIFO
-        val queue:Queue<Node<NT>> = LinkedList<Node<NT>>()
-
-        val visited: MutableMap<Node<NT>,Node<NT>> = mutableMapOf()
+        val queue: Queue<Node<NT>> = LinkedList<Node<NT>>()
+        val visited: MutableMap<Node<NT>, Node<NT>> = mutableMapOf()
+        var prevNode: Node<NT>? = null
+        val prevMap: MutableMap<Node<NT>, Node<NT>> = mutableMapOf()
         queue.add(startingNode)
-        while(queue.isNotEmpty()){
-            val currentNode:Node<NT> = queue.poll()
+        while (queue.isNotEmpty()) {
+            val currentNode: Node<NT> = queue.poll()
             //mark the current node as visited
-            if(visited[currentNode] == null){
-                visited[currentNode]=currentNode
+            if (visited[currentNode] == null) {
+                visited[currentNode] = currentNode
                 sideEffect(currentNode)
-                if(breakCondition(currentNode)){
-                    return returnOnBreak(currentNode)
+                prevNode = currentNode
+                if (breakCondition(currentNode)) {
+                    return returnOnBreak(currentNode, prevNode, prevMap)
                 }
             }
             //add neighbours to the queue
-            val neighbours:Map<out Node<NT>,Edge<NT>>? = this.adjacencyList[currentNode]
-            if(neighbours!=null){
-                for( nb in neighbours.keys){
-                    if(visited[nb] == null) queue.offer(nb)
+            val neighbours: Map<out Node<NT>, Edge<NT>>? = this.adjacencyList[currentNode]
+            if (neighbours != null) {
+                for (nb in neighbours.keys) {
+                    if (visited[nb] == null) {
+                        queue.offer(nb)
+//                        val oldPrevNodes:List<Node<NT>> = prevMap.computeIfAbsent(nb, { listOf()})
+//                        val newPrevNodes = oldPrevNodes + currentNode
+//                        prevMap[nb]= newPrevNodes
+                        prevMap.putIfAbsent(nb,currentNode)
+                    }
                 }
             }
         }
@@ -132,28 +140,48 @@ data class AdjacencyListGraph<
     override fun breadthTraversal(startingNode: Node<NT>, sideEffect: (node: Node<NT>) -> Unit) {
         this.breakableBreadthTraversal(
             startingNode = startingNode,
-            breakCondition = {false},
-            returnOnBreak = {null},
+            breakCondition = { false },
+            returnOnBreak = { _, _, _ -> Unit },
             sideEffect = sideEffect
         )
     }
 
     override fun breadthSearch(target: NT): Node<NT>? {
-        return this.defaultStartingNode?.let{
-            this.breadthSearch(it,target)
+        return this.defaultStartingNode?.let {
+            this.breadthSearch(it, target)
         }
     }
 
     override fun breadthSearch(startingNode: Node<NT>, target: NT): Node<NT>? {
         return this.breakableBreadthTraversal(
             startingNode = startingNode,
-            breakCondition = {node:Node<NT> -> node.getValue()==target},
-            returnOnBreak = {it},
+            breakCondition = { node: Node<NT> -> node.getValue() == target },
+            returnOnBreak = { node, prevNode, prevMap -> node },
             sideEffect = {}
         )
     }
 
+    /**
+     * find shortest path between two nodes, using bread depth first
+     * TODO make it return all equivalent shortest paths
+     */
     override fun shortestPath(startNode: Node<NT>, endNode: Node<NT>): List<Node<NT>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val result: List<Node<NT>>? = this.breakableBreadthTraversal(
+            startingNode = startNode,
+            breakCondition = { it == endNode },
+            returnOnBreak = { targetNode: Node<NT>,
+                              prevNode: Node<NT>,
+                              prevMap: Map<Node<NT>, Node<NT>> ->
+                val path = mutableListOf<Node<NT>>(targetNode)
+                var previousNode: Node<NT>? = prevMap[targetNode]
+                while (previousNode != null) {
+                    path.add(previousNode)
+                    previousNode = prevMap[previousNode]
+                }
+                path.reversed()
+            },
+            sideEffect = {}
+        )
+        return result ?: listOf()
     }
 }
